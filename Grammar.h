@@ -4,10 +4,6 @@
 #include "LinkedList.h"
 #include "utils.h"
 
-typedef enum{
-	LEFT=0,RIGHT,NONE
-}Directions;
-
 typedef struct production{
 	char from;
 	char * word;
@@ -16,7 +12,6 @@ typedef struct production{
 typedef production * Production;
 
 typedef struct grammar{
-	Directions dir;
 	char * name;
 	char dist;
 	char * nonTerminals;
@@ -25,5 +20,16 @@ typedef struct grammar{
 }grammar;
 
 typedef grammar * Grammar;
+
+
+Grammar newGrammar();
+void addNonTerminal(Grammar g, char * from);
+void addTerminal(Grammar g, char * from);
+Production newProduction(Grammar g);
+void addProduction(Grammar g, Production p);
+Production getLastProduction(Grammar g);
+void removeNonTerminal(Grammar g, char c);
+void addWord(Production p, char * word);
+void printGrammar(Grammar g);
 
 #endif

@@ -5,7 +5,6 @@ Grammar newGrammar(){
 	if(g==NULL){
 		newInsufficientMemoryException("Grammar");
 	}
-	g->dir=NONE;
 	g->nonTerminals = malloc(sizeof(char)*27);
 	g->terminals = malloc(sizeof(char)*27);
 	//esto puede ir en una funcion nueva "initProductions"
@@ -31,16 +30,8 @@ void addTerminal(Grammar g, char * from){
 	g->terminals=concat(g->terminals,from);
 }
 
-void setDirection(Grammar g, Directions d){
-	if(g->dir!=d && g->dir!=NONE){
-		printf("Incompatible productions (Both left and right productions detected)\nProgram terminated\n");
-		exit(1);
-	};
-	g->dir=d;
-}
-
 Production newProduction(Grammar g){
-	Production p=malloc(sizeof(production));	
+	Production p=malloc(sizeof(production));
 	addProduction(g,p);
 	return p;
 }
@@ -60,6 +51,10 @@ void removeNonTerminal(Grammar g, char c){
 		g->nonTerminals[j] = g->nonTerminals[j+1];
 	}
 	g->nonTerminals[strlen(g->nonTerminals)-1] = 0;
+}
+
+void addWord(Production p, char * word){
+	p->word=concat(p->word,word);
 }
 
 void printGrammar(Grammar g){
@@ -86,27 +81,12 @@ void printGrammar(Grammar g){
 	cleanBuffer(buffer, 50);
 	sprintf(buffer, "\nSimbolo inicial:\n%c\nLa gramatica es valida y es de ", g->dist );
 	stringy = concat(stringy, buffer);
-	if(g->dir == RIGHT){
-		stringy = concat(stringy, "DERECHA");
-	}else if(g->dir == LEFT){
-		stringy = concat(stringy, "IZQUIERDA");
-	}else{
-		stringy = concat(stringy, "DERECHA o IZQUIERDA (las producciones valen para cualquier sentido)");
-	}
 	printf("%s\n", stringy);
 	printf("Producciones\n");
 	Element e;
 	Production p;
 	FOR_EACH(e, g->productions){
 		p = (Production)e->data;
-		char first, second;
-		if(g->dir == LEFT){
-			first = p->nonTerminal;
-			second = p->terminal;
-		}else{
-			first = p->terminal;
-			second = p->nonTerminal;
-		}
-		printf("%c->%c%c\n", p->from, first, second);
+		printf("%c->%s\n", p->from, p->word);
 	}
 }
