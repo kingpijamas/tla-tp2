@@ -7,10 +7,8 @@ Grammar newGrammar(){
 	}
 	g->nonTerminals = malloc(sizeof(char)*27);
 	g->terminals = malloc(sizeof(char)*27);
-	//esto puede ir en una funcion nueva "initProductions"
 	g->productions=newList();
 	initList(g->productions);
-	//hasta aca
 	return g;
 }
 
@@ -57,8 +55,15 @@ void addWord(Production p, char * word){
 	p->word=concat(p->word,word);
 }
 
+boolean isTerminal(Grammar g, char c){
+	return containsChar(g->terminals,c);
+}
+
+boolean isNonTerminal(Grammar g, char c){
+	return containsChar(g->nonTerminals,c);
+}
+
 void printGrammar(Grammar g){
-	//TIRA SEGFAULT
 	char * stringy;
 	char * buffer = malloc(50);
 	stringy = strdup("====================================================\nGramatica ");

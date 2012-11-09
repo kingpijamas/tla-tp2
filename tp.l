@@ -42,9 +42,9 @@ blank	[ \t\n]
 <PRODUCTIONTO>{letter}+ {printf("to: %s\n",yytext);addWord(p,yytext);BEGIN PRODUCTIONSEPARATOR;}
 <PRODUCTIONTO>{lambda} {printf("to: %s\n",yytext);BEGIN PRODUCTIONSEPARATOR;}
 
-<PRODUCTIONSEPARATOR>{blank}*\|{blank}* {p=newProduction(g);BEGIN PRODUCTIONTO;}
-<PRODUCTIONSEPARATOR>{blank}*,{blank}* {p=newProduction(g);BEGIN PRODUCTIONFROM;}
-<PRODUCTIONSEPARATOR>{blank}*\}{blank}*\) {p=newProduction(g);printf("Listo\n");}
+<PRODUCTIONSEPARATOR>{blank}*\|{blank}* {char from=p->from;p=newProduction(g);p->from=from;BEGIN PRODUCTIONTO;}
+<PRODUCTIONSEPARATOR>{blank}*,{blank}* {BEGIN PRODUCTIONFROM;}
+<PRODUCTIONSEPARATOR>{blank}*\}{blank}*\) {printf("Listo\n");processGrammar(g);}
 
 . {printf("error:%s\n",yytext);newSyntaxError();}
 
@@ -66,11 +66,8 @@ void processErrors(int err){
 		case INVALID_FROM:
 			printf("Error! Al menos uno de los no terminales que producen no esta declarado.\n");
 			break;
-		case INVALID_NONTERMINAL:
-			printf("Error! Al menos uno de los no terminales producidos no esta declarado.\n");
-			break;
-		case INVALID_TERMINAL:
-			printf("Error! Al menos uno de los terminales en la produccion no esta en el alfabeto.\n");
+		case INVALID_SYMBOL:
+			printf("Error! Al menos uno de los no simbolos (terminales o no terminales) producidos no esta declarado.\n");
 			break;
 		case DIST_NOT_USED:
 			printf("Error! El no terminal distinguido no tiene produccion.\n");
@@ -83,11 +80,11 @@ void processErrors(int err){
 
 void processGrammar(Grammar g){
 	processErrors(validateGrammar(g));
-	printGrammar(g);
+	/*printGrammar(g);
 	g = removeUnreachableProductions(g);
 	g = removeUnproductiveNodes(g);
 	g->name = "Nueva Gramatica";
-	printGrammar(g);
+	printGrammar(g);*/
 }
 
 int main(void){

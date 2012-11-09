@@ -2,9 +2,10 @@
 
 GrammarErrorCodes validateGrammar(Grammar g){
 	//Validacion que los "from" esten contenidos en NoTerm y el dist esta en algun from	
-	char useDist = false;
+	boolean useDist = false;
 	Element e;
 	Production p;
+	int i=0;
 	if(!containsChar(g->nonTerminals,g->dist)){
 		/*distinguido no es noTerm*/
 		return INVALID_DIST;
@@ -18,19 +19,14 @@ GrammarErrorCodes validateGrammar(Grammar g){
 			// From no esta en non terminals
 			return INVALID_FROM;			
 		}
-	/*	if(p->nonTerminal != 0){
-			if(!containsChar(g->nonTerminals,p->nonTerminal)){
-				//non terminal no esta en non terminal
-				return INVALID_NONTERMINAL;
+		if(p->word!=NULL){//la palabra es lambda
+			while(p->word[i]!='\0'){
+				if(!isTerminal(g,p->word[i])&&!isNonTerminal(g,p->word[i])){
+					return INVALID_SYMBOL;
+				}
+				i++;
 			}
 		}
-		if(p->terminal != 0){
-			if(p->terminal != '\\' && !containsChar(g->terminals,p->terminal)){
-				//terminal no esta en terminal
-				return INVALID_TERMINAL;
-			}
-		}
-	*/
 	}
 	if(useDist == false){
 		return DIST_NOT_USED;
