@@ -10,8 +10,7 @@ typedef enum{
 
 typedef struct production{
 	char from;
-	char nonTerminal;
-	char terminal;
+	char * word;
 }production;
 
 typedef production * Production;
