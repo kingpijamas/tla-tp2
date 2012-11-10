@@ -82,21 +82,16 @@ void removeElemFromList(Element elem, List list){
 	}	
 	if(found){
 		return;
-	}	
-	removeElemInList(elem,list);
-	return;
-}
-
-void removeElemInList(Element elem, List list){
+	}
 	/* Soy el primero */
-	if(list->pFirst == elem){
+	if(list->pFirst==elem){
 		list->pFirst = elem->next;
 		if(elem->next != NULL){
 			elem->next->prev = NULL;
 		}
 	}
 	/* Soy el ultimo */
-	if(list->pLast == elem){
+	if(list->pLast==elem){
 		list->pLast = elem->prev;
 		if(elem->prev != NULL){
 			elem->prev->next = NULL;

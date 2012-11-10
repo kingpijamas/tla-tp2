@@ -19,6 +19,6 @@ boolean isProductiveNonTerminal(Grammar g, Production p, List visited, char nt);
 boolean isVisited(Production p,List visited);
 void visit(Production p, List visited);
 void unvisit(Production p, List visited);
-void printProductionList(List l);
+void printProductionList(char * c,List l);
 
 #endif

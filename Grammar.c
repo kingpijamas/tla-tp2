@@ -101,8 +101,8 @@ void printGrammar(Grammar g){
 
 void printProduction(Production p){	
 	if(p==NULL){
-		printf("production: %c->%d, productive:%d\n",p->from,p,p->productive);
+		printf("%c->%d, productive:%d\n",p->from,p,p->productive);
 	}else{
-		printf("production: %c->%s, productive:%d\n",p->from,p->word,p->productive);
+		printf("%c->%s, productive:%d\n",p->from,p->word,p->productive);
 	}
 }
