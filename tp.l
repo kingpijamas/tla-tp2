@@ -39,8 +39,9 @@ blank	[ \t\n]
 <PRODUCTIONFROM>{upper}{blank}*\-> {printf("from: %c\n",yytext[0]);p=newProduction(g);p->from=yytext[0]; BEGIN PRODUCTIONTO;}
 
 <PRODUCTIONTO>{blank}* {BEGIN PRODUCTIONTO;}
+<PRODUCTIONTO>{lower}+ {printf("to: %s <--productive\n",yytext);addWord(p,yytext);p->productive=true;BEGIN PRODUCTIONSEPARATOR;}
 <PRODUCTIONTO>{letter}+ {printf("to: %s\n",yytext);addWord(p,yytext);BEGIN PRODUCTIONSEPARATOR;}
-<PRODUCTIONTO>{lambda} {printf("to: %s\n",yytext);BEGIN PRODUCTIONSEPARATOR;}
+<PRODUCTIONTO>{lambda} {printf("to: %s\n",yytext);addWord(p,yytext);p->productive=true;BEGIN PRODUCTIONSEPARATOR;}
 
 <PRODUCTIONSEPARATOR>{blank}*\|{blank}* {char from=p->from;p=newProduction(g);p->from=from;BEGIN PRODUCTIONTO;}
 <PRODUCTIONSEPARATOR>{blank}*,{blank}* {BEGIN PRODUCTIONFROM;}

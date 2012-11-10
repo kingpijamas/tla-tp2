@@ -17,7 +17,7 @@ GrammarErrorCodes validateGrammar(Grammar g){
 		}
 		if(!containsChar(g->nonTerminals,p->from)){
 			// From no esta en non terminals
-			return INVALID_FROM;			
+			return INVALID_FROM;		
 		}
 		if(p->word!=NULL){//la palabra es lambda
 			while(p->word[i]!='\0'){
@@ -34,124 +34,72 @@ GrammarErrorCodes validateGrammar(Grammar g){
 	return NO_ERROR;
 }
 
-Grammar removeUnreachableProductions(Grammar g){
-	int i,j;
-	Production p;
-	Element e;
-	//int n=g->productions->NumEl;//should be == size(nonTerminals) at this point;
-	int n = strlen(g->nonTerminals);
-	RelationMatrix t=generateRelationMatrix(g,n);
-	findReachableProductions(t,n);
-	/*for(i=0;i<n;i++){
-		for(j=0;j<n;j++){
-			if((t[i][j]).reachable!=false){
-				removeElemFromList(t[i][j].elem, g->productions);
-			}
-		}
-	}*/
-	/*i = indexOf(g->nonTerminals, g->dist);
-	int k;
-	for(k=0,j=0;j<n;j++, k++){
-		if((t[i][j]).reachable==false && g->nonTerminals[k] != 0){
-			//removeElemFromList(t[i][j].elem, g->productions);
-			List aux = malloc(sizeof(llist));
-			FOR_EACH(e, g->productions){
-				p = (Production)e->data;
-				//Element aux;
-				if(p->from != g->nonTerminals[k]){
-					addToList(p, aux);
-				}
-			}
-			free(g->productions);
-			g->productions = aux;
-			removeNonTerminal(g, g->nonTerminals[k]);
-			k--;
-		}
-	}*/
-	return g;
-}
-
-RelationMatrix generateRelationMatrix(Grammar g, int n){//n is the size of productions
-	int i;
-	RelationMatrix relM = malloc(n*sizeof(Relation));
-	/*int row,col;
+Grammar removeUnproductiveProductions(Grammar g){
 	
-	if(relM==NULL){
-		printf("<LOG - postProcessing.c>\n\tNull pointer.\n<end>\n");
-	}
-	for(i=0; i<n; i++){
-		relM[i]=malloc(n*sizeof(relation));
-		if(relM[i]==NULL){
-			printf("<LOG - postProcessing.c>\n\tNull pointer.\n<end>\n");
-		}
-	}
-	Production p;
 	Element e;
+	Production p;
 	FOR_EACH(e,g->productions){
-		p=(Production)e->data;
-		if(p->nonTerminal != 0){
-			row=indexOf(g->nonTerminals, p->from);
-			col=indexOf(g->nonTerminals, p->nonTerminal);
-			relM[row][col].reachable=true;
-			relM[row][col].elem=e;
+		p=(Production)e->data;		
+		List visited=newList();
+		initList(visited);
+		if(p->productive!=true){
+		
 		}
 	}
-	i = indexOf(g->nonTerminals, g->dist);
-	relM[i][i].reachable=true;
-	relM[i][i].elem=e;
-	*/
-
-	return relM;
-}
-
-void findReachableProductions(RelationMatrix t,int n){//uses Warshall's algorithm
-	int i,j,k;
-	for(k=0;k<n;k++){
-		for(i=0;i<n;i++){
-			for(j=0;j<n;j++){
-				(t[i][j]).reachable=(t[i][j]).reachable || (t[i][k].reachable && t[k][j].reachable);
-			}
-		}
+	
+	while(){
+		
 	}
-}
-
-Grammar removeUnproductiveNodes(Grammar g){
-	Element e;
-	Production p;
-	boolean changes = true;
-	boolean * isProductive = malloc(sizeof(boolean) * strlen(g->nonTerminals));
-	int i;
-	for(i = 0; i < strlen(g->nonTerminals); i++){
-		isProductive[i] = false;
-	}
-	/*while(changes){
-		changes = false;
-		FOR_EACH(e, g->productions){
-			p = (Production)e->data;
-			if(isProductive[indexOf(g->nonTerminals, p->from)] == false){
-				if((p->nonTerminal == 0 && p->terminal == '\\') || (p->nonTerminal != 0 && isProductive[indexOf(g->nonTerminals, p->nonTerminal)])){
-					isProductive[indexOf(g->nonTerminals, p->from)] = true;
-					changes = true;
-				}
-			}
-		}
-	}
-	int k;
-	int n = strlen(g->nonTerminals);
-	for(k=0,i=0;i<n;i++, k++){
-		if(!isProductive[i] && g->nonTerminals[k] != 0){
-			List aux = malloc(sizeof(llist));
-			FOR_EACH(e, g->productions){
-				p = (Production)e->data;
-				if(p->from != g->nonTerminals[k] && p->nonTerminal != g->nonTerminals[k]){
-					addToList(p, aux);
-				}
-			}
-			free(g->productions);
-			g->productions = aux;
-			removeNonTerminal(g, g->nonTerminals[k]);
-			k--;
-		}
-	}*/
+	
+	
+	
+	
+	
+	
+	
 	return g;
+}
+
+boolean isProductive(Grammar g,Production p,List visited){
+	int i;
+	if(p->productive==true){
+		return true;
+	}
+	i=0;
+	while(p->word[i]!='\0'){	
+		if(isNonTerminal(p->word[i])==true){
+			if(!isProductiveNonTerminal(g,p,viisted,p->word[i])==true){	
+				return false;
+			}
+		}
+		i++;
+	}
+	p->productive=true;
+	return true;
+}
+
+boolean isProductiveNonTerminal(Grammar g, Production p, List visited, char nt){
+		Element e;
+		Production aux;
+		FOR_EACH(e,g->productions){
+			aux=(Production) e->data;
+			if(aux->from==p->from && isVisited(aux,visited)==true){
+				addToList(aux,visited);
+				if(isProductive(g, p, visited)){
+					return true;
+				}
+				//TODO: forma de remover el ultimo de la lista
+			}
+		}
+		return false;
+}
+
+boolean isVisited(Production p,List visited){
+	Element e;
+	FOR_EACH(e,visited){
+		if(((Production)e->data)==p){
+			return true;
+		}
+	}
+	return false;
 }

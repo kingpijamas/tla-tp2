@@ -10,7 +10,7 @@
 
 typedef struct relation{
 	char reachable;
-	Element elem;
+	List elems;
 }relation;
 
 typedef relation * Relation;

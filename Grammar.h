@@ -7,6 +7,7 @@
 typedef struct production{
 	char from;
 	char * word;
+	boolean productive;
 }production;
 
 typedef production * Production;

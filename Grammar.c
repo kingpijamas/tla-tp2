@@ -30,6 +30,7 @@ void addTerminal(Grammar g, char * from){
 
 Production newProduction(Grammar g){
 	Production p=malloc(sizeof(production));
+	p->productive=false;
 	addProduction(g,p);
 	return p;
 }
