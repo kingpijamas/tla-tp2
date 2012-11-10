@@ -73,17 +73,21 @@ void addElemToList(Element NewEl, List list){
 
 void removeElemFromList(Element elem, List list){
 	Element item;
-	int flag;
-
+	int found=0;
 	FOR_EACH(item, list){
 		if(item == elem){
-			flag = 1;
+			found = 1;
 			break;
 		}
 	}	
-	if(flag == 0){
+	if(found){
 		return;
 	}	
+	removeElemInList(elem,list);
+	return;
+}
+
+void removeElemInList(Element elem, List list){
 	/* Soy el primero */
 	if(list->pFirst == elem){
 		list->pFirst = elem->next;

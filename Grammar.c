@@ -57,10 +57,12 @@ void addWord(Production p, char * word){
 }
 
 boolean isTerminal(Grammar g, char c){
+	//printf("%c is T? %d\n",c,containsChar(g->terminals,c));
 	return containsChar(g->terminals,c);
 }
 
 boolean isNonTerminal(Grammar g, char c){
+	//printf("%c is NT? %d\n",c,containsChar(g->nonTerminals,c));
 	return containsChar(g->nonTerminals,c);
 }
 
@@ -94,5 +96,13 @@ void printGrammar(Grammar g){
 	FOR_EACH(e, g->productions){
 		p = (Production)e->data;
 		printf("%c->%s\n", p->from, p->word);
+	}
+}
+
+void printProduction(Production p){	
+	if(p==NULL){
+		printf("production: %c->%d, productive:%d\n",p->from,p,p->productive);
+	}else{
+		printf("production: %c->%s, productive:%d\n",p->from,p->word,p->productive);
 	}
 }

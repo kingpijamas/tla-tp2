@@ -41,11 +41,11 @@ blank	[ \t\n]
 <PRODUCTIONTO>{blank}* {BEGIN PRODUCTIONTO;}
 <PRODUCTIONTO>{lower}+ {printf("to: %s <--productive\n",yytext);addWord(p,yytext);p->productive=true;BEGIN PRODUCTIONSEPARATOR;}
 <PRODUCTIONTO>{letter}+ {printf("to: %s\n",yytext);addWord(p,yytext);BEGIN PRODUCTIONSEPARATOR;}
-<PRODUCTIONTO>{lambda} {printf("to: %s\n",yytext);addWord(p,yytext);p->productive=true;BEGIN PRODUCTIONSEPARATOR;}
+<PRODUCTIONTO>{lambda} {printf("to: %s\tPRODUCCION LAMBDA\n",yytext);p->productive=true;BEGIN PRODUCTIONSEPARATOR;}
 
 <PRODUCTIONSEPARATOR>{blank}*\|{blank}* {char from=p->from;p=newProduction(g);p->from=from;BEGIN PRODUCTIONTO;}
 <PRODUCTIONSEPARATOR>{blank}*,{blank}* {BEGIN PRODUCTIONFROM;}
-<PRODUCTIONSEPARATOR>{blank}*\}{blank}*\) {printf("Listo\n");processGrammar(g);}
+<PRODUCTIONSEPARATOR>{blank}*\}{blank}*\) {printf("Lex done\n\n");processGrammar(g);}
 
 . {printf("error:%s\n",yytext);newSyntaxError();}
 
@@ -58,6 +58,7 @@ void newSyntaxError(){
 
 void processErrors(int err){
 	if(err == NO_ERROR){
+		printf("No hubo errores\n\n");
 		return;
 	}
 	switch( err ) {
@@ -73,19 +74,14 @@ void processErrors(int err){
 		case DIST_NOT_USED:
 			printf("Error! El no terminal distinguido no tiene produccion.\n");
 			break;
-		default :
-			;
+		default :;
 	}
 	exit(1);
 }
 
 void processGrammar(Grammar g){
 	processErrors(validateGrammar(g));
-	/*printGrammar(g);
-	g = removeUnreachableProductions(g);
-	g = removeUnproductiveNodes(g);
-	g->name = "Nueva Gramatica";
-	printGrammar(g);*/
+	g = removeUnproductiveProductions(g);
 }
 
 int main(void){

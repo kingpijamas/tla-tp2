@@ -8,25 +8,17 @@
 #include "LinkedList.h"
 #include "Grammar.h"
 
-typedef struct relation{
-	char reachable;
-	List elems;
-}relation;
-
-typedef relation * Relation;
-typedef Relation * RelationMatrix;
-
 typedef enum {
 	INVALID_DIST=!NO_ERROR,INVALID_FROM,INVALID_SYMBOL,DIST_NOT_USED
 } GrammarErrorCodes;
 
-RelationMatrix generateRelationMatrix(Grammar g, int n);//n is the size of production
-void findReachableProductions(RelationMatrix t,int n);//uses Warshall's algorithm
-Grammar removeUnreachableProductions(Grammar g);
-Grammar removeUnproductiveNodes(Grammar g);
-Grammar toNormalRight(Grammar g);
-Grammar normalize(Grammar g);
 GrammarErrorCodes validateGrammar(Grammar g);
-void printAutomatonFromGrammar(Grammar g);
+Grammar removeUnproductiveProductions(Grammar g);
+boolean isProductive(Grammar g,Production p,List visited);
+boolean isProductiveNonTerminal(Grammar g, Production p, List visited, char nt);
+boolean isVisited(Production p,List visited);
+void visit(Production p, List visited);
+void unvisit(Production p, List visited);
+void printProductionList(List l);
 
 #endif

@@ -31,4 +31,5 @@ void initList(List list);
 Element addToList(void *item, List list);
 void addElemToList(Element NewEl, List list);
 void removeElemFromList(Element elem, List list);
+void removeElemInList(Element elem, List list);
 #endif
