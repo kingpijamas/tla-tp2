@@ -18,6 +18,7 @@ boolean containsChar(char * s, char c);
 int indexOf(char * s, char c);
 int indexOfLast(char * s);
 char * concat(char * s, char * t);
+char * concatChar(char * s, char t);
 char * strdup(const char * s);
 void cleanBuffer(char * buffer, int i);
 char getLast(char * s);
@@ -25,6 +26,7 @@ char * stringify(char c);
 int ctoi(char c);
 int getLastDigit(char * s);
 char * newBuffer(int i);
+char * substring(char * str, size_t begin, size_t len);
 
 //Errors and exceptions
 void newInsufficientMemoryException(char * filename);

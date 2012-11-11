@@ -5,7 +5,6 @@ Grammar newGrammar(){
 	if(g==NULL){
 		newInsufficientMemoryException("Grammar");
 	}
-	g->dir=NONE;
 	g->nonTerminals = malloc(sizeof(char)*27);
 	g->terminals = malloc(sizeof(char)*27);
 	//esto puede ir en una funcion nueva "initProductions"
@@ -31,22 +30,15 @@ void addTerminal(Grammar g, char * from){
 	g->terminals=concat(g->terminals,from);
 }
 
-void setDirection(Grammar g, Directions d){
-	if(g->dir!=d && g->dir!=NONE){
-		printf("Incompatible productions (Both left and right productions detected)\nProgram terminated\n");
-		exit(1);
-	};
-	g->dir=d;
+void addProduction(Grammar g, Production p){
+	addToList(p,g->productions);
 }
+
 
 Production newProduction(Grammar g){
 	Production p=malloc(sizeof(production));	
 	addProduction(g,p);
 	return p;
-}
-
-void addProduction(Grammar g, Production p){
-	addToList(p,g->productions);
 }
 
 Production getLastProduction(Grammar g){
@@ -62,7 +54,7 @@ void removeNonTerminal(Grammar g, char c){
 	g->nonTerminals[strlen(g->nonTerminals)-1] = 0;
 }
 
-void printGrammar(Grammar g){
+/*void printGrammar(Grammar g){
 	//TIRA SEGFAULT
 	char * stringy;
 	char * buffer = malloc(50);
@@ -109,4 +101,4 @@ void printGrammar(Grammar g){
 		}
 		printf("%c->%c%c\n", p->from, first, second);
 	}
-}
+}*/

@@ -1,12 +1,11 @@
 #ifndef Grammar_h
 #define Grammar_h
 
-#include "LinkedList.h"
+#include <stdio.h>
+#include <stdlib.h>
 #include "utils.h"
-
-typedef enum{
-	LEFT=0,RIGHT,NONE
-}Directions;
+#include "Grammar.h"
+#include "LinkedList.h"
 
 typedef struct production{
 	char from;
@@ -16,7 +15,6 @@ typedef struct production{
 typedef production * Production;
 
 typedef struct grammar{
-	Directions dir;
 	char * name;
 	char dist;
 	char * nonTerminals;
@@ -25,5 +23,12 @@ typedef struct grammar{
 }grammar;
 
 typedef grammar * Grammar;
+Grammar newGrammar();
+void addNonTerminal(Grammar g, char * from);
+void addTerminal(Grammar g, char * from);
+void addProduction(Grammar g, Production p);
+Production newProduction(Grammar g);
+Production getLastProduction(Grammar g);
+void removeNonTerminal(Grammar g, char c);
 
 #endif

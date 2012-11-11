@@ -7,5 +7,4 @@ for FILE in $TOREMOVE; do
 done;
 
 rm -f *.o
-rm -f tp.c
-rm -f lex.yy.c
+rm -f ASDR*

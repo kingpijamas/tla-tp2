@@ -45,11 +45,27 @@ char * concat(char * s, char * t){
 		if(aux == NULL){
 			newInsufficientMemoryException("utils");
 		}else if (aux != s){
-			free(s);
 			s = aux;
 		}
 		s = strcat(s,t);
 	}
+	return s;
+}
+
+char * concatChar(char * s, char t){
+	if(s==NULL){
+		s=strdup("");
+	}
+	char * aux = realloc(s,strlen(s)+2);
+	if(aux == NULL){
+		newInsufficientMemoryException("utils");
+	}else if (aux != s){
+		free(s);
+		s = aux;
+	}
+	s[strlen(s-1)] = t;
+	s[strlen(s)] = '\0';
+
 	return s;
 }
 
@@ -63,12 +79,12 @@ char * strdup(const char * s){
 }
 
 char * stringify(char c){
-	char * s = malloc(sizeof(char) * 2);
+	char * s = malloc(sizeof(char)*2);
 	if(s == NULL){
 		newInsufficientMemoryException("utils");
 	}
 	s[0] = c;
-	s[1] = '\0';
+	s[1] = 0;
 	return s;
 }
 
@@ -133,4 +149,14 @@ void newInsufficientMemoryException(char * filename){
 void newException(char * filename,char * text){
 	printf("<LOG - %s.c>\n\t%s\n<end>\n", filename, text);
 	exit(1);
+}
+
+
+
+char * substring(char * str, size_t begin, size_t len)
+{
+  if (str == 0 || strlen(str) == 0 || strlen(str) < begin || strlen(str) < (begin+len))
+    return 0;
+
+  return strndup(str + begin, len);
 }
