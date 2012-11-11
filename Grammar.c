@@ -36,6 +36,7 @@ void addProduction(Grammar g, Production p){
 Production newProduction(Grammar g){
 	Production p=malloc(sizeof(production));
 	p->productive=false;
+	p->visited=false;
 	addProduction(g,p);
 	return p;
 }

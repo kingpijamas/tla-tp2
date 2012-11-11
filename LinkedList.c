@@ -70,39 +70,50 @@ void addElemToList(Element NewEl, List list){
 	
 }
 
-
 void removeElemFromList(Element elem, List list){
 	Element item;
-	int found=0;
+	int index=-1;
+	int i=0;
 	FOR_EACH(item, list){
 		if(item == elem){
-			found = 1;
+			printf("lo encontre\n");
+			index = i;
 			break;
 		}
-	}	
-	if(found){
+		i++;
+	}
+	if(index < 0){
 		return;
 	}
+	printf("el flag esta bien %i/%i\n",index,list->NumEl);
 	/* Soy el primero */
-	if(list->pFirst==elem){
+	if(list->pFirst == elem){
+		printf("caso A");
 		list->pFirst = elem->next;
 		if(elem->next != NULL){
 			elem->next->prev = NULL;
 		}
 	}
+	printf("no caso A");
 	/* Soy el ultimo */
-	if(list->pLast==elem){
+	if(list->pLast == elem){
+		printf("caso B");
 		list->pLast = elem->prev;
 		if(elem->prev != NULL){
 			elem->prev->next = NULL;
 		}
 	}
+	printf("no caso B");
 	if(elem->prev != NULL && elem->next != NULL){
+		printf("caso C");
 		elem->prev->next = elem->next;
 		elem->next->prev = elem->prev;
 	}
+	printf("no caso C");
+	printf("caso D");
 	elem->prev = NULL;
 	elem->next = NULL;
 	(list->NumEl)--;
 	return;
 }
+

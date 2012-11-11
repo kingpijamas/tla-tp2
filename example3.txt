@@ -3,3 +3,4 @@ aNOTEQUALb = ({S, U, V, T, X}, {a, b}, S, {
     U -> TaU | TaT,
     V -> TbV | TbT,
     T -> aTbT | bTaT | \ , X->\})
+

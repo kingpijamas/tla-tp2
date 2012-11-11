@@ -20,5 +20,6 @@ boolean isVisited(Production p,List visited);
 void visit(Production p, List visited);
 void unvisit(Production p, List visited);
 void printProductionList(char * c,List l);
+void printList(List l);
 
 #endif
