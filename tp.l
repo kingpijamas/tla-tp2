@@ -41,7 +41,7 @@ blank	[ \t\n]
 <PRODUCTIONTO>{blank}* {BEGIN PRODUCTIONTO;}
 <PRODUCTIONTO>{lower}+ {printf("to: %s <--productive\n",yytext);addWord(p,yytext);p->productive=true;BEGIN PRODUCTIONSEPARATOR;}
 <PRODUCTIONTO>{letter}+ {printf("to: %s\n",yytext);addWord(p,yytext);BEGIN PRODUCTIONSEPARATOR;}
-<PRODUCTIONTO>{lambda} {printf("to: %s\tPRODUCCION LAMBDA\n",yytext);p->productive=true;BEGIN PRODUCTIONSEPARATOR;}
+<PRODUCTIONTO>{lambda} {printf("to: %s\tPRODUCCION LAMBDA\n",yytext);addWord(p,"");p->productive=true;BEGIN PRODUCTIONSEPARATOR;}
 
 <PRODUCTIONSEPARATOR>{blank}*\|{blank}* {char from=p->from;p=newProduction(g);p->from=from;BEGIN PRODUCTIONTO;}
 <PRODUCTIONSEPARATOR>{blank}*,{blank}* {BEGIN PRODUCTIONFROM;}

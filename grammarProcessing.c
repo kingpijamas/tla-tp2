@@ -18,13 +18,11 @@ GrammarErrorCodes validateGrammar(Grammar g){
 		if(!containsChar(g->nonTerminals,p->from)){// From no esta en non terminals
 			return INVALID_FROM;		
 		}
-		if(p->word!=NULL){//la palabra no es lambda
-			while(p->word[i]!='\0'){
-				if(!isTerminal(g,p->word[i])&&!isNonTerminal(g,p->word[i])){//todo simbolo no lambda TIENE que ser o T o NT
-					return INVALID_SYMBOL;
-				}
-				i++;
+		while(p->word[i]!='\0'){
+			if(!isTerminal(g,p->word[i])&&!isNonTerminal(g,p->word[i])){//todo simbolo no lambda TIENE que ser o T o NT
+				return INVALID_SYMBOL;
 			}
+			i++;
 		}
 	}
 	if(useDist == false){

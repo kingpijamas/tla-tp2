@@ -100,7 +100,7 @@ void printGrammar(Grammar g){
 }
 
 void printProduction(Production p){	
-	if(p==NULL){
+	if(p->word[0]=='\0'){
 		printf("%c->%d, productive:%d\n",p->from,p,p->productive);
 	}else{
 		printf("%c->%s, productive:%d\n",p->from,p->word,p->productive);
