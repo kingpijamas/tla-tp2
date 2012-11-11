@@ -20,133 +20,69 @@ blank	[ \t\n]
 %s DIST
 %s NONTERMINALS
 %s TERMINALS
-%s PRODF
-%s PRODT
+%s PRODUCTIONFROM
+%s PRODUCTIONTO
 %s FROMPIPE
-%s END
+%s PRODUCTIONSEPARATOR
 
 %%
 {blank}+ ;
 
 <INITIAL>{letter}([^ \n\t])* {g = newGrammar(); g->name=strdup(yytext); BEGIN START;}
-<START>={blank}*\({blank}*\{ { BEGIN NONTERMINALS;}
-<NONTERMINALS>{upper}{blank}*, {addNonTerminal(g,stringify(yytext[0]));}
-<NONTERMINALS>{upper}{blank}*\}{blank}*,{blank}*\{ { addNonTerminal(g,stringify(yytext[0]));BEGIN TERMINALS;}
+<START>={blank}*\({blank}*\{ {printf("I'm in'\n");BEGIN NONTERMINALS;}
+<NONTERMINALS>{upper}{blank}*, {printf("Estoy en nonterminals\n");addNonTerminal(g,stringify(yytext[0]));}
+<NONTERMINALS>{upper}{blank}*\}{blank}*,{blank}*\{ {printf("Estoy en nonterminals\n");addNonTerminal(g,stringify(yytext[0]));BEGIN TERMINALS;}
 
-<TERMINALS>{lower}{blank}*, {addTerminal(g,yytext);}
-<TERMINALS>{lower}{blank}*\}{blank}*, {addTerminal(g,stringify(yytext[0])); BEGIN DIST;}
-<DIST>{upper}{blank}*,{blank}*\{ {g->dist = yytext[0];BEGIN PRODF;}
-<PRODF>{upper}{blank}*\-> {p=newProduction(g);p->from=yytext[0]; BEGIN PRODT;}
+<TERMINALS>{lower}{blank}*, {printf("Estoy en terminals\n");addTerminal(g,yytext);}
+<TERMINALS>{lower}{blank}*\}{blank}*, {printf("Estoy en terminals\n");addTerminal(g,stringify(yytext[0])); BEGIN DIST;}
+<DIST>{upper}{blank}*,{blank}*\{ {printf("Estoy en dist: %c\n",yytext[0]);g->dist = yytext[0];BEGIN PRODUCTIONFROM;}
+<PRODUCTIONFROM>{upper}{blank}*\-> {printf("from: %c\n",yytext[0]);p=newProduction(g);p->from=yytext[0]; BEGIN PRODUCTIONTO;}
 
-<PRODT>{lower}{blank}*{upper}{blank}*, {setDirection(g, RIGHT);p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)]; BEGIN PRODF;}
-<PRODT>{upper}{blank}*{lower}{blank}*, {setDirection(g, LEFT);p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0]; BEGIN PRODF;}
-<PRODT>{upper}{blank}*, {p->nonTerminal=yytext[0]; BEGIN PRODF;}
-<PRODT>({lower}|{lambda}){blank}*, {p->terminal=yytext[0]; BEGIN PRODF;}
+<PRODUCTIONTO>{blank}* {BEGIN PRODUCTIONTO;}
+<PRODUCTIONTO>{lower}+ {printf("to: %s <--productive\n",yytext);addWord(p,yytext);p->productive=true;BEGIN PRODUCTIONSEPARATOR;}
+<PRODUCTIONTO>{letter}+ {printf("to: %s\n",yytext);addWord(p,yytext);BEGIN PRODUCTIONSEPARATOR;}
+<PRODUCTIONTO>{lambda} {printf("to: %s\tPRODUCCION LAMBDA\n",yytext);p->productive=true;BEGIN PRODUCTIONSEPARATOR;}
 
-<PRODT>{lower}{blank}*{upper}{blank}*\| {setDirection(g, RIGHT);p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)];aux=p;p=newProduction(g);p->from=aux->from; BEGIN PRODT;}
-<PRODT>{upper}{blank}*{lower}{blank}*\| {setDirection(g, LEFT);p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0];aux=p;p=newProduction(g);p->from=aux->from; BEGIN PRODT;}
-<PRODT>{upper}{blank}*\| {p->nonTerminal=yytext[0];aux=p;p=newProduction(g);p->from=aux->from; BEGIN PRODT;}
-<PRODT>({lower}|{lambda}){blank}*\| {p->terminal=yytext[0];aux=p;p=newProduction(g);p->from=aux->from; BEGIN PRODT;}
+<PRODUCTIONSEPARATOR>{blank}*\|{blank}* {char from=p->from;p=newProduction(g);p->from=from;BEGIN PRODUCTIONTO;}
+<PRODUCTIONSEPARATOR>{blank}*,{blank}* {BEGIN PRODUCTIONFROM;}
+<PRODUCTIONSEPARATOR>{blank}*\}{blank}*\) {printf("Lex done\n\n");processGrammar(g);}
 
-<PRODT>{lower}{blank}*{upper}{blank}*\}{blank}*\) {setDirection(g, RIGHT);p->terminal=yytext[0];p->nonTerminal=yytext[indexOfLast(yytext)]; processGrammar(g);}
-<PRODT>{upper}{blank}*{lower}{blank}*\}{blank}*\) {setDirection(g, LEFT);p->terminal=yytext[indexOfLast(yytext)];p->nonTerminal=yytext[0]; processGrammar(g);}
-<PRODT>{upper}{blank}*\}{blank}*\) {p->nonTerminal=yytext[0]; processGrammar(g);}
-<PRODT>({lower}|{lambda}){blank}*\}{blank}*\) {p->terminal=yytext[0]; processGrammar(g);}
-
-. {newSyntaxError();}
+. {printf("error:%s\n",yytext);newSyntaxError();}
 
 %%
 
-location whereAmI(){
-	if(g!=NULL){
-		return INGRAMMAR;
-	}
-	if(a!=NULL){
-		return INAUTOMATON;
-	}
-	return NOWHERE;
-}
-
 void newSyntaxError(){
-	switch(whereAmI()){
-		case INGRAMMAR:
-			printf("Syntax error: Not well written grammar.\n");
-		break;
-		case INAUTOMATON:
-			printf("Syntax error: Not well written automaton.\n");
-		break;
-		case NOWHERE:
-			printf("Syntax error: Cannot recognize input type.\n");
-		break;
-		default:
-			;
-	}
-	 exit(1);
+	printf("Syntax error: Not well written grammar.\n");
+	exit(1);
 }
 
 void processErrors(int err){
 	if(err == NO_ERROR){
+		printf("No hubo errores\n\n");
 		return;
 	}
-	if(whereAmI()==INAUTOMATON){
-		switch(err){
-		case TWO_INITIAL_STATES:
-			printf("Error! Hay mas de un estado incial.\n");
-			break;
-		case REFERENCING_UNEXISTENT_STATE:
-			printf("Error! Se esta referenciando un estado inexistente.\n");
-			break;
-		case DISCONNECTED_STATE:
-			printf("Error! El automata no es conexo.\n");
-			break;
-		case NO_INITIAL_STATE:
-			printf("Error! El automata no tiene estado inicial.\n");
-		default:
-			;
-		}
-	}else{
-		switch( err ) {
+	switch( err ) {
 		case INVALID_DIST:
 			printf("Error! El distinguido no es parte de los no terminales.\n");
 			break;
 		case INVALID_FROM:
 			printf("Error! Al menos uno de los no terminales que producen no esta declarado.\n");
 			break;
-		case INVALID_NONTERMINAL:
-			printf("Error! Al menos uno de los no terminales producidos no esta declarado.\n");
-			break;
-		case INVALID_TERMINAL:
-			printf("Error! Al menos uno de los terminales en la produccion no esta en el alfabeto.\n");
+		case INVALID_SYMBOL:
+			printf("Error! Al menos uno de los no simbolos (terminales o no terminales) producidos no esta declarado.\n");
 			break;
 		case DIST_NOT_USED:
 			printf("Error! El no terminal distinguido no tiene produccion.\n");
 			break;
-		default :
-			;
-		}
+		default :;
 	}
 	exit(1);
 }
 
 void processGrammar(Grammar g){
 	processErrors(validateGrammar(g));
-	printGrammar(g);
-	g = toNormalRight(g);
-	g = removeUnreachableProductions(g);
-	g = removeUnproductiveNodes(g);
-	g->name = "Nueva Gramatica";
-	printGrammar(g);
-	printAutomatonFromGrammar(g);
-}
-
-void processAutomaton(Automaton a){
-	processErrors(validateAutomaton(a));
-	printAutomaton(a);
-	FILE *fp;
-	fp=fopen("out.gr", "w");
-	fprintf(fp, "%s", grammarToString(fromAFDtoGR(a)));
-	fclose(fp);
-	printf("Conversion de formato '.dot' a '.gr' completa, favor de abrir: '%s'\n","out.gr");
+	g = removeUnproductiveProductions(g);
+	makeASDR(g);
 }
 
 int main(void){

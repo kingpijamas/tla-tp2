@@ -73,26 +73,25 @@ void addElemToList(Element NewEl, List list){
 
 void removeElemFromList(Element elem, List list){
 	Element item;
-	int flag;
-
+	int found=0;
 	FOR_EACH(item, list){
 		if(item == elem){
-			flag = 1;
+			found = 1;
 			break;
 		}
 	}	
-	if(flag == 0){
+	if(found){
 		return;
-	}	
+	}
 	/* Soy el primero */
-	if(list->pFirst == elem){
+	if(list->pFirst==elem){
 		list->pFirst = elem->next;
 		if(elem->next != NULL){
 			elem->next->prev = NULL;
 		}
 	}
 	/* Soy el ultimo */
-	if(list->pLast == elem){
+	if(list->pLast==elem){
 		list->pLast = elem->prev;
 		if(elem->prev != NULL){
 			elem->prev->next = NULL;
