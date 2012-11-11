@@ -18,7 +18,7 @@ echo <string> | ./tp
 ./tp
 	*Arma un Analizador Sintáctico Descendente con Retroceso (ASDR) a partir de la entrada que se le ingrese a continuación.
 ./ASDR <cadena>
-	*Acepta o rechaza una cadena segun el lenguaje con el que se armó dicho archivo.ç
+	*Acepta o rechaza una cadena segun el lenguaje con el que se armó dicho archivo.
 
 *EJEMPLO*
 	make clean && make tp && cat example.txt | ./tp && ./ASDR xyyxyzzy
