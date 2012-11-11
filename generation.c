@@ -1,24 +1,6 @@
 #include "generation.h"
 
 void makeASDR(Grammar g){
-	/*Grammar g = newGrammar();
-	g->dist = 'S';
-	addTerminal(g, stringify('a'));
-	addTerminal(g, stringify('b'));
-	addNonTerminal(g, stringify('S'));
-	addNonTerminal(g, stringify('B'));
-	Production prod = newProduction(g);
-	prod->from = 'S';
-	prod->word = "aBB";
-	prod = newProduction(g);
-	prod->from = 'S';
-	prod->word = "B";
-	prod = newProduction(g);
-	prod->from = 'B';
-	prod->word = "bSa";
-	prod = newProduction(g);
-	prod->from = 'B';
-	prod->word = "b";*/
 	system("rm -f ASDR*");
 	writeC("\n#include <stdio.h>");
 	writeC("\n#include <stdlib.h>");
@@ -53,6 +35,7 @@ void makeASDR(Grammar g){
 	Production p, p2;
 	FOR_EACH(e, g->productions){
 		p=(Production)e->data;
+			printf("\n<<<%s>>>", parsed);
 		if(!containsChar(parsed, p->from)){
 			writeC("\n\nchar * ");
 			writeCChar(p->from);

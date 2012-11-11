@@ -9,4 +9,3 @@ done;
 rm -f *.o
 rm -f ASDR*
 rm -f *.out
-rm tp

@@ -8,17 +8,22 @@ Instrucciones
 =============
 
 make tp
-	*Arma el trabajo práctico.
+	*Compila el trabajo practico
 make clean
-	*Borra lo armado.
+	*Borra la compilación del trabajo.
 cat <archivo> | ./tp
 	*Arma un Analizador Sintáctico Descendente con Retroceso (ASDR) a partir del archivo <archivo>.
 echo <string> | ./tp
 	*Arma un Analizador Sintáctico Descendente con Retroceso (ASDR) a partir del texto <string>.
 ./tp
 	*Arma un Analizador Sintáctico Descendente con Retroceso (ASDR) a partir de la entrada que se le ingrese a continuación.
+./genASDR <archivo>
+	*Arma un Analizador Sintáctico Descendente con Retroceso (ASDR) a partir de la entrada que se le ingrese a continuación.
 ./ASDR <cadena>
 	*Acepta o rechaza una cadena segun el lenguaje con el que se armó dicho archivo.
+./clean
+	*Borra el ASDR generado.
 
 *EJEMPLO*
 	make clean && make tp && cat example.txt | ./tp && ./ASDR xyyxyzzy
+	make tp && ./genASDR example.txt && ./ASDR xyyxyzzy

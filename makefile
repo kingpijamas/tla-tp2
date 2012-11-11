@@ -6,6 +6,7 @@ OUT_EXE=tp
 COPTS= -g
 
 tp:
+	@-rm -f tp
 	@$(FLEX) $(LEXFILES)
 	@$(CC) $(COPTS) -o $(OUT_EXE) $(FILES)
 	@-rm -f *.yy.c
@@ -16,11 +17,6 @@ tp:
 clean:
 	@-rm -f *.o core
 	@-rm -f ASDR*
-	@-rm -f $(OUT_EXE)
-
-.PHONY: build_msg
-
-build_msg:
-	@printf "#\n# Building $(OUT_EXE)\n#\n"
+	@-rm tp
 
 #rebuild: clean build
