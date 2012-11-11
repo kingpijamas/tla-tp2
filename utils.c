@@ -45,7 +45,6 @@ char * concat(char * s, char * t){
 		if(aux == NULL){
 			newInsufficientMemoryException("utils");
 		}else if (aux != s){
-			//free(s);
 			s = aux;
 		}
 		s = strcat(s,t);
@@ -61,7 +60,6 @@ char * concatChar(char * s, char t){
 	if(aux == NULL){
 		newInsufficientMemoryException("utils");
 	}else if (aux != s){
-		//free(s);
 		s = aux;
 	}
 	s[strlen(s-1)] = t;

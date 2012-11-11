@@ -41,7 +41,5 @@ void removeNonTerminal(Grammar g, char c);
 void addWord(Production p, char * word);
 boolean isTerminal(Grammar g, char c);
 boolean isNonTerminal(Grammar g, char c);
-void printGrammar(Grammar g);
-void printProduction(Production p);
 
 #endif

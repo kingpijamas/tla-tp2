@@ -19,6 +19,7 @@ void makeASDR(Grammar g){
 	prod = newProduction(g);
 	prod->from = 'B';
 	prod->word = "b";*/
+	system("rm -f ASDR*");
 	writeC("\n#include <stdio.h>");
 	writeC("\n#include <stdlib.h>");
 	writeC("\n#include \"ASDR.h\"");
@@ -155,8 +156,6 @@ void makeASDR(Grammar g){
 
 	system("chmod 777 ./ASDR.c");
 	system("gcc -o ASDR ASDR.c utils.c");
-
-	return 0;
 }
 
 int getTerminalCount(char * string){

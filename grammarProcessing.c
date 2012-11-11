@@ -11,20 +11,17 @@ GrammarErrorCodes validateGrammar(Grammar g){
 	}
 	FOR_EACH(e,g->productions){
 		p=(Production)e->data;
-		printProduction(p);
 		if(p->from == g->dist){
 			useDist = true;
 		}
 		if(!containsChar(g->nonTerminals,p->from)){// From no esta en non terminals
 			return INVALID_FROM;		
 		}
-		if(p->word!=NULL){//la palabra no es lambda
-			while(p->word[i]!='\0'){
-				if(!isTerminal(g,p->word[i])&&!isNonTerminal(g,p->word[i])){//todo simbolo no lambda TIENE que ser o T o NT
-					return INVALID_SYMBOL;
-				}
-				i++;
+		while(p->word[i]!='\0'){
+			if(!isTerminal(g,p->word[i])&&!isNonTerminal(g,p->word[i])){//todo simbolo no lambda TIENE que ser o T o NT
+				return INVALID_SYMBOL;
 			}
+			i++;
 		}
 	}
 	if(useDist == false){
@@ -45,15 +42,7 @@ Grammar removeUnproductiveProductions(Grammar g){
 			addToList((Production)e->data,aux);
 		}
 	}
-	printf("Pre-remocion\n");
-	FOR_EACH(e,g->productions){
-		printProduction((Production)e->data);
-	}
 	g->productions=aux;
-	printf("\nFinalmente\n");
-	FOR_EACH(e,g->productions){
-		printProduction((Production)e->data);
-	}
 	return g;
 }
 

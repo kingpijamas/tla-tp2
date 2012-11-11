@@ -29,36 +29,36 @@ blank	[ \t\n]
 {blank}+ ;
 
 <INITIAL>{letter}([^ \n\t])* {g = newGrammar(); g->name=strdup(yytext); BEGIN START;}
-<START>={blank}*\({blank}*\{ {printf("I'm in'\n");BEGIN NONTERMINALS;}
-<NONTERMINALS>{upper}{blank}*, {printf("Estoy en nonterminals\n");addNonTerminal(g,stringify(yytext[0]));}
-<NONTERMINALS>{upper}{blank}*\}{blank}*,{blank}*\{ {printf("Estoy en nonterminals\n");addNonTerminal(g,stringify(yytext[0]));BEGIN TERMINALS;}
+<START>={blank}*\({blank}*\{ {BEGIN NONTERMINALS;}
+<NONTERMINALS>{upper}{blank}*, {addNonTerminal(g,stringify(yytext[0]));}
+<NONTERMINALS>{upper}{blank}*\}{blank}*,{blank}*\{ {addNonTerminal(g,stringify(yytext[0]));BEGIN TERMINALS;}
 
-<TERMINALS>{lower}{blank}*, {printf("Estoy en terminals\n");addTerminal(g,yytext);}
-<TERMINALS>{lower}{blank}*\}{blank}*, {printf("Estoy en terminals\n");addTerminal(g,stringify(yytext[0])); BEGIN DIST;}
-<DIST>{upper}{blank}*,{blank}*\{ {printf("Estoy en dist: %c\n",yytext[0]);g->dist = yytext[0];BEGIN PRODUCTIONFROM;}
-<PRODUCTIONFROM>{upper}{blank}*\-> {printf("from: %c\n",yytext[0]);p=newProduction(g);p->from=yytext[0]; BEGIN PRODUCTIONTO;}
+<TERMINALS>{lower}{blank}*, {addTerminal(g,yytext);}
+<TERMINALS>{lower}{blank}*\}{blank}*, {addTerminal(g,stringify(yytext[0])); BEGIN DIST;}
+<DIST>{upper}{blank}*,{blank}*\{ {g->dist = yytext[0];BEGIN PRODUCTIONFROM;}
+<PRODUCTIONFROM>{upper}{blank}*\-> {p=newProduction(g);p->from=yytext[0]; BEGIN PRODUCTIONTO;}
 
 <PRODUCTIONTO>{blank}* {BEGIN PRODUCTIONTO;}
-<PRODUCTIONTO>{lower}+ {printf("to: %s <--productive\n",yytext);addWord(p,yytext);p->productive=true;BEGIN PRODUCTIONSEPARATOR;}
-<PRODUCTIONTO>{letter}+ {printf("to: %s\n",yytext);addWord(p,yytext);BEGIN PRODUCTIONSEPARATOR;}
-<PRODUCTIONTO>{lambda} {printf("to: %s\tPRODUCCION LAMBDA\n",yytext);p->productive=true;BEGIN PRODUCTIONSEPARATOR;}
+<PRODUCTIONTO>{lower}+ {addWord(p,yytext);p->productive=true;BEGIN PRODUCTIONSEPARATOR;}
+<PRODUCTIONTO>{letter}+ {addWord(p,yytext);BEGIN PRODUCTIONSEPARATOR;}
+<PRODUCTIONTO>{lambda} {addWord(p,"");p->productive=true;BEGIN PRODUCTIONSEPARATOR;}
 
 <PRODUCTIONSEPARATOR>{blank}*\|{blank}* {char from=p->from;p=newProduction(g);p->from=from;BEGIN PRODUCTIONTO;}
 <PRODUCTIONSEPARATOR>{blank}*,{blank}* {BEGIN PRODUCTIONFROM;}
-<PRODUCTIONSEPARATOR>{blank}*\}{blank}*\) {printf("Lex done\n\n");processGrammar(g);}
+<PRODUCTIONSEPARATOR>{blank}*\}{blank}*\) {processGrammar(g);}
 
-. {printf("error:%s\n",yytext);newSyntaxError();}
+. {printf("Error:%s\n",yytext);newSyntaxError();}
 
 %%
 
 void newSyntaxError(){
-	printf("Syntax error: Not well written grammar.\n");
+	printf("Error de sintaxis: Gramática mal escrita.\n");
 	exit(1);
 }
 
 void processErrors(int err){
 	if(err == NO_ERROR){
-		printf("No hubo errores\n\n");
+		printf("Se armo el lenguaje correctamente\n");
 		return;
 	}
 	switch( err ) {

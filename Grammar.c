@@ -14,7 +14,7 @@ Grammar newGrammar(){
 
 void addNonTerminal(Grammar g, char * from){
 	if(g->nonTerminals!=NULL && containsChar(g->nonTerminals, *from)){
-		printf("Duplicate non terminal detected.\n Program terminated.\n");
+		printf("No terminal duplicado.\n No se acepta el lenguaje.\n");
 		exit(1);
 	}
 	g->nonTerminals=concat(g->nonTerminals,from);
@@ -22,7 +22,7 @@ void addNonTerminal(Grammar g, char * from){
 
 void addTerminal(Grammar g, char * from){
 	if(g->terminals!=NULL && containsChar(g->terminals, from[0])){
-		printf("Duplicate terminal detected.\n Program terminated.\n");
+		printf("Terminal duplicado.\n No se acepta el lenguaje.\n");
 		exit(1);
 	}
 	g->terminals=concat(g->terminals,from);
@@ -53,3 +53,14 @@ void removeNonTerminal(Grammar g, char c){
 	g->nonTerminals[strlen(g->nonTerminals)-1] = 0;
 }
 
+void addWord(Production p, char * word){
+	p->word=concat(p->word,word);
+}
+
+boolean isTerminal(Grammar g, char c){
+	return containsChar(g->terminals,c);
+}
+
+boolean isNonTerminal(Grammar g, char c){
+	return containsChar(g->nonTerminals,c);
+}
