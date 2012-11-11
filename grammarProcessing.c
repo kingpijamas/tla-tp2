@@ -41,7 +41,11 @@ Grammar removeUnproductiveProductions(Grammar g){
 	FOR_EACH(e,g->productions){
 		p=(Production)e->data;
 		initList(visited);
-		if(isProductive(g,p,visited)){				
+		printf("----------------\n");
+		printProduction(p);
+		printf("\n");
+		if(isProductive(g,p,visited)){
+			printf("\n\n\n");
 			addToList((Production)e->data,aux);
 		}
 	}
@@ -62,6 +66,7 @@ boolean isProductive(Grammar g,Production p,List visited){
 	if(p->productive==true){
 		return true;
 	}
+	p->visited=true;
 	i=0;
 	while(p->word[i]!='\0'){
 		if(isNonTerminal(g,p->word[i])==true){
@@ -72,6 +77,7 @@ boolean isProductive(Grammar g,Production p,List visited){
 		i++;
 	}
 	p->productive=true;
+	p->visited=false;
 	return true;
 }
 
@@ -80,12 +86,23 @@ boolean isProductiveNonTerminal(Grammar g, Production p, List visited, char nt){
 		Production aux;
 		FOR_EACH(e,g->productions){
 			aux=(Production) e->data;
-			if(aux->from==nt && isVisited(aux,visited)!=true){
-				visit(aux,visited);
+			if(aux->from==nt && aux->visited==false){
+				printf("--\nestoy en ispnt, con %c\n",nt);
+				printf("vengo de:");
+				printProduction(p);
+				printf("me fijo en:");
+				printProduction(aux);
+				printf("producciones:");
+				printList(g->productions);
+				aux->visited=true;
+				//visit(aux,visited);
 				if(isProductive(g, aux, visited)){
+					aux->visited=false;
+					//unvisit(aux,visited);
 					return true;
 				}
-				unvisit(aux,visited);
+				aux->visited=false;
+				//unvisit(aux,visited);
 			}
 		}
 		return false;
@@ -109,11 +126,31 @@ void unvisit(Production p, List visited){
 	Element e=visited->pLast;
 	Production aux;
 	while(e->prev!=NULL){
-		aux=(Production)e->data;	
-		if(aux==p){		
+		aux=(Production)e->data;
+		if(aux==p){
+			printf("busco p:(%d) ",p);
+			printProduction(p);
+			printf("remover:(%d) ",aux);
+			printProduction(aux);
 			removeElemFromList(e,visited);
 		}
 		e=e->prev;
 	}
 	return;
+}
+
+void printList(List l){
+	Element e;
+	printf("\t(");
+	FOR_EACH(e,l){
+		if(((Production)e->data)->word==NULL){
+			printf("%c->\\",((Production)e->data)->from);
+		}else{
+			printf("%c->%s",((Production)e->data)->from,((Production)e->data)->word);
+		}
+		if(((Production)e->data)->visited==true){
+			printf("(X),");
+		}
+	}
+	printf(")\n");
 }

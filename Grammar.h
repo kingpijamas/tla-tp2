@@ -8,6 +8,7 @@ typedef struct production{
 	char from;
 	char * word;
 	boolean productive;
+	boolean visited;
 }production;
 
 typedef production * Production;
