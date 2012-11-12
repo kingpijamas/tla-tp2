@@ -1,4 +1,0 @@
-#!/bin/bash
-
-rm -f sth.out
-flex tp.l && gcc -Wall -o sth.out lex.yy.c utils.c Grammar.c LinkedList.c grammarProcessing.c generation.c && ./sth.out
