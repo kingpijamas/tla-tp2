@@ -35,7 +35,7 @@ void makeASDR(Grammar g){
 	Production p, p2;
 	FOR_EACH(e, g->productions){
 		p=(Production)e->data;
-			printf("\n<<<%s>>>", parsed);
+			//printf("\n<<<%s>>>", parsed);
 		if(!containsChar(parsed, p->from)){
 			writeC("\n\nchar * ");
 			writeCChar(p->from);

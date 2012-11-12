@@ -38,11 +38,11 @@ Grammar removeUnproductiveProductions(Grammar g){
 	FOR_EACH(e,g->productions){
 		p=(Production)e->data;
 		initList(visited);
-		printf("----------------\n");
-		printProduction(p);
-		printf("\n");
+		//printf("----------------\n");
+		//printProduction(p);
+		//printf("\n");
 		if(isProductive(g,p,visited)){
-			printf("\n\n\n");
+			//printf("\n\n\n");
 			addToList((Production)e->data,aux);
 		}
 	}
@@ -76,13 +76,13 @@ boolean isProductiveNonTerminal(Grammar g, Production p, List visited, char nt){
 		FOR_EACH(e,g->productions){
 			aux=(Production) e->data;
 			if(aux->from==nt && aux->visited==false){
-				printf("--\nestoy en ispnt, con %c\n",nt);
+				/*printf("--\nestoy en ispnt, con %c\n",nt);
 				printf("vengo de:");
 				printProduction(p);
 				printf("me fijo en:");
 				printProduction(aux);
 				printf("producciones:");
-				printList(g->productions);
+				printList(g->productions);*/
 				aux->visited=true;
 				//visit(aux,visited);
 				if(isProductive(g, aux, visited)){
@@ -117,10 +117,10 @@ void unvisit(Production p, List visited){
 	while(e->prev!=NULL){
 		aux=(Production)e->data;
 		if(aux==p){
-			printf("busco p:(%d) ",p);
+			/*printf("busco p:(%d) ",p);
 			printProduction(p);
 			printf("remover:(%d) ",aux);
-			printProduction(aux);
+			printProduction(aux);*/
 			removeElemFromList(e,visited);
 		}
 		e=e->prev;
@@ -130,7 +130,7 @@ void unvisit(Production p, List visited){
 
 void printList(List l){
 	Element e;
-	printf("\t(");
+	/*printf("\t(");
 	FOR_EACH(e,l){
 		if(((Production)e->data)->word==NULL){
 			printf("%c->\\",((Production)e->data)->from);
@@ -141,5 +141,5 @@ void printList(List l){
 			printf("(X),");
 		}
 	}
-	printf(")\n");
+	printf(")\n");*/
 }

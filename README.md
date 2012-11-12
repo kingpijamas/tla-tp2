@@ -8,7 +8,7 @@ Instrucciones
 =============
 
 make tp
-	*Compila el trabajo practico
+	*Compila el trabajo practico.
 make clean
 	*Borra la compilación del trabajo.
 cat <archivo> | ./tp
@@ -26,4 +26,4 @@ echo <string> | ./tp
 
 *EJEMPLO*
 	make clean && make tp && cat example.txt | ./tp && ./ASDR xyyxyzzy
-	make tp && ./genASDR example.txt && ./ASDR xyyxyzzy
+	make tp && ./genASDR example3.txt && ./ASDR aabbbaabb
